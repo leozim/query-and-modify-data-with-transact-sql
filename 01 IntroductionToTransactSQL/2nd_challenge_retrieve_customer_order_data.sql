@@ -14,9 +14,11 @@ FROM
 SELECT
 	PurchaseOrderNumber + 
 	' (' +
+	--STR(RevisionNumber, 1) +
 	CONVERT(varchar(5), RevisionNumber) + 
 	')' AS PurchaseOrderRevisionNumber,
 	Convert(nvarchar(30), OrderDate, 101) AS OrderDate,
+	Convert(nvarchar(30), OrderDate, 102) AS Date,
 	Convert(nvarchar(30), OrderDate) AS DefaultOrderDate
 FROM
 	SalesLT.SalesOrderHeader;
