@@ -107,6 +107,9 @@ ORDER BY
 	c.CustomerID;
 
 -- RETRIEVE DATA FROM THREE TABLES
+-- WHEN AN OUTER JOIN IS USED, THE REMAINING OUTER JOINS
+-- SHOULD BE IN THE SAME DIRECTION(LEFT, RIGHT) OF THE
+-- FIRST OUTER JOIN.
 SELECT
 	p.Name AS ProductName,
 	oh.PurchaseOrderNumber
@@ -121,5 +124,57 @@ LEFT JOIN
 ORDER BY
 	p.ProductID;
 
+-- USING INNER JOIN AT THEN END OF OUTER JOINs
+SELECT
+	p.Name AS ProductName,
+	c.Name AS Category,
+	oh.PurchaseOrderNumber
+FROM
+	SalesLT.Product AS p
+LEFT OUTER JOIN
+	SalesLT.SalesOrderDetail AS od
+		ON p.ProductID = od.ProductID
+LEFT OUTER JOIN
+	SalesLT.SalesOrderHeader AS oh
+		ON od.SalesOrderID = oh.SalesOrderID
+INNER JOIN
+	SalesLT.ProductCategory AS c
+		ON p.ProductCategoryID = c.ProductCategoryID
+ORDER BY
+	p.ProductID;
+
 /* CROSS JOIN */
+-- RETURN MORE THAN 260K OF ROWS. IT'S USEFUL WHEN WE WANT SEND
+-- AN EMAIL FOR EVERY PRODUCT TO EVERY CUSTOMER
+-- FULL CARTESIAN PRODUCT
+SELECT
+	p.Name,
+	c.FirstName,
+	c.LastName,
+	c.EmailAddress
+FROM
+	SalesLT.Product AS p
+CROSS JOIN
+	SalesLT.Customer AS c;
+
 /* SELF JOIN */
+-- IT ISN'T A SPECIFIC KIND OF JOIN. IT'S JUST A TECHNIQUE TO JOIN
+-- THE SAME TABLE TO ITSELF.
+-- THIS APPROACH CAN BE USEFUL WHEN A TABLE HAS A FOERIGN REFERENCES
+-- A PRIMARY KEY OF THE SAME TABLE.
+/*
+for example in a table of employees where an employee’s manager is also an employee, 
+or a table of product categories where each category might be 
+a subcategory of another category.
+*/
+SELECT
+	pcat.Name AS ParentCategory,
+	cat.Name AS SubCategory
+FROM
+	SalesLT.ProductCategory AS cat
+INNER JOIN
+	SalesLT.ProductCategory AS pcat
+		ON cat.ParentProductCategoryID = pcat.ProductCategoryID
+ORDER BY
+	ParentCategory, SubCategory;
+
