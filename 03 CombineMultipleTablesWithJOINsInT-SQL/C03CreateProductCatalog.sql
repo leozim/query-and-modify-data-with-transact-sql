@@ -7,4 +7,16 @@
 	subcategory name, and product name fields for the catalog.
 */
 
-
+SELECT
+	pc.Name,
+	psca.Name AS SubcategoryName,
+	p.Name AS ProductName
+FROM
+	SalesLT.ProductCategory pc
+INNER JOIN
+	SalesLT.ProductCategory psca
+		ON pc.ProductCategoryID = psca.ParentProductCategoryID
+INNER JOIN
+	SalesLT.Product p
+		ON psca.ProductCategoryID = p.ProductCategoryID
+ORDER BY pc.Name, SubcategoryName, ProductName;

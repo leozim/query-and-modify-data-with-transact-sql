@@ -28,3 +28,15 @@ You must write a query that returns a list of customer IDs, company names,
 contact names (first name and last name), and phone numbers for customers 
 with no address stored in the database.
 */
+SELECT
+	c.CustomerID,
+	C.CompanyName,
+	c.FirstName + ' ' + c.LastName,
+	c.Phone
+FROM
+	SalesLT.Customer c
+LEFT OUTER JOIN
+	SalesLT.CustomerAddress ca
+		ON c.CustomerID = ca.CustomerID
+WHERE
+	ca.AddressID IS NULL;
