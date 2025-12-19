@@ -8,6 +8,19 @@ Customers who have not placed any orders should be included at the bottom of the
 for the purchase order number and total due.
 */
 
+SELECT
+	c.CompanyName,
+	c.FirstName + c.LastName AS FullName,
+	oh.PurchaseOrderNumber,
+	oh.TotalDue
+FROM
+	SalesLT.Customer AS c
+LEFT OUTER JOIN
+	SalesLT.SalesOrderHeader AS oh
+		ON c.CustomerID = oh.CustomerID
+ORDER BY
+	oh.TotalDue DESC;
+
 -- 2 Retrieve a list of customers with no address
 /*
 A sales employee has noticed that Adventure Works does not have address information for all customers. 
