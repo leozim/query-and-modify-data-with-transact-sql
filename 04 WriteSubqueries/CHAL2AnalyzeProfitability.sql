@@ -12,6 +12,58 @@ Filter your previous query to include only products where the cost price
 is higher than the average selling price.
 */
 
+SELECT
+    p.ProductID,
+    p.Name,
+    p.StandardCost AS Cost,
+    p.ListPrice,
+    (SELECT AVG(od.UnitPrice) 
+     FROM SalesLT.SalesOrderDetail od 
+     WHERE p.ProductID = od.ProductID) AS AvgUnitPrice
+FROM
+    SalesLT.Product AS p
+ORDER BY
+    ProductID;
+
+
+SELECT
+    p.ProductID,
+    p.Name,
+    p.StandardCost AS Cost,
+    p.ListPrice,
+    (SELECT AVG(od.UnitPrice) 
+     FROM SalesLT.SalesOrderDetail od 
+     WHERE p.ProductID = od.ProductID) AS AvgUnitPrice
+FROM
+    SalesLT.Product AS p
+WHERE
+    p.StandardCost > (SELECT AVG(od.UnitPrice) 
+     FROM SalesLT.SalesOrderDetail od 
+     WHERE p.ProductID = od.ProductID)
+ORDER BY
+    ProductID;   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 -- SOLUTIONS
