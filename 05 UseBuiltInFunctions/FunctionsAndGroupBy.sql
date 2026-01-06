@@ -40,6 +40,7 @@ FROM
 /* LOGICAL FUNCTIONS */
 SELECT
 	AddressType,
+	-- If AddresType = 'Main Office' então retorne 'Billing' se não 'Mailing'
 	IIF(AddressType = 'Main Office', 'Billing', 'Mailing') AS UseAddressFor
 FROM
 	SalesLT.CustomerAddress;
@@ -111,9 +112,71 @@ SELECT MIN(YEAR(OrderDate)) AS Earliest,
 FROM SalesLT.SalesOrderHeader;
 
 SELECT ProductCategoryID, SUM(ListPrice) AS Total,
-AVG(ListPrice) AS AveragePrice,
+AVG(ListPrice) AS AveragePrice, -- pode resultar diferente q sum()/count() pois avg considera NULL
 SUM(ListPrice)/COALESCE(COUNT(*), 0) AS Arithmetic,
 MIN(ListPrice) AS MinimumPrice,
 MAX(ListPrice) AS MaximumPrice
 FROM SalesLT.Product
 GROUP BY ProductCategoryID;
+
+/* SUMMARIZE DATA  WITH GROUP BY */
+
+SELECT
+	CustomerID
+FROM
+	SalesLT.SalesOrderHeader
+GROUP BY
+	CustomerID;
+
+-- equivalent to
+SELECT DISTINCT CustomerID
+FROM SalesLT.SalesOrderHeader;
+
+/* GROUP BY NÃO GARANTE A ORDEM DOS RESULTADOS */
+SELECT
+	CustomerID,
+	COUNT(*) AS OrderCount
+FROM
+	SalesLT.SalesOrderHeader
+GROUP BY
+	CustomerID
+ORDER BY
+	CustomerID;
+
+/*
+	THE CLAUSES IN A SELECT STATEMENT ARE APPLIED IN THE FOLLOWING ORDER:
+
+	1. FROM
+	2. WHERE
+	3. GROUP BY
+	4. HAVING
+	5. SELECT
+	6. ORDER BY
+
+	YOU CAN REFERENCE A COLUMN ALIAS IN THE ORDER BY CLAUSE, BUT NOT IN THE
+	GROUP BY CLAUSE. THE FOLLOWING QUERY WILL RESULT IN AN INVALID COLUMN NAME
+	ERROR:
+*/
+
+SELECT CustomerID AS Customer,
+       COUNT(*) AS OrderCount
+FROM SalesLT.SalesOrderHeader
+GROUP BY Customer
+ORDER BY Customer;
+
+SELECT CustomerID AS Customer,
+       COUNT(*) AS OrderCount
+FROM SalesLT.SalesOrderHeader
+GROUP BY CustomerID
+ORDER BY Customer;
+
+SELECT CustomerID, PurchaseOrderNumber, COUNT(*) AS OrderCount
+FROM SalesLT.SalesOrderHeader
+GROUP BY CustomerID, PurchaseOrderNumber;
+
+/* Filter groups with HAVING */
+SELECT CustomerID,
+      COUNT(*) AS OrderCount
+FROM SalesLT.SalesOrderHeader
+GROUP BY CustomerID
+HAVING COUNT(*) < 10;
