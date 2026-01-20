@@ -161,7 +161,6 @@ ORDER BY
 SELECT CustomerID AS Customer,
        COUNT(*) AS OrderCount
 FROM SalesLT.SalesOrderHeader
-GROUP BY Customer
 ORDER BY Customer;
 
 SELECT CustomerID AS Customer,
@@ -175,8 +174,9 @@ FROM SalesLT.SalesOrderHeader
 GROUP BY CustomerID, PurchaseOrderNumber;
 
 /* Filter groups with HAVING */
-SELECT CustomerID,
-      COUNT(*) AS OrderCount
+SELECT 
+	CustomerID,
+    COUNT(*) AS OrderCount
 FROM SalesLT.SalesOrderHeader
 GROUP BY CustomerID
 HAVING COUNT(*) < 10;
