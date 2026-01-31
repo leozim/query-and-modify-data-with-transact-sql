@@ -180,3 +180,13 @@ SELECT
 FROM SalesLT.SalesOrderHeader
 GROUP BY CustomerID
 HAVING COUNT(*) < 10;
+
+SELECT SalesOrderID, CustomerID, OrderDate, PurchaseOrderNumber, TotalDue
+INTO SalesLT.InvoiceS
+FROM SalesLT.SalesOrderHeader;
+
+SELECT *
+FROM SalesLT.InvoiceS;
+
+SELECT SalesOrderID, CustomerID, OrderDate, PurchaseOrderNumber, TotalDue
+FROM SalesLT.SalesOrderHeader;
